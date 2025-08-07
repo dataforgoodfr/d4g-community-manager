@@ -1,4 +1,4 @@
-# marty_bot/libraries/group_sync_services.py
+# libraries/group_sync_services.py
 # This module will contain core business logic for services like group synchronization.
 # It will be used by both the bot (app) and standalone scripts.
 
