@@ -5,7 +5,7 @@ import sys
 # Ajoute le répertoire racine du projet au PYTHONPATH pour permettre les imports relatifs.
 # Utile si le script est exécuté par cron où PYTHONPATH n'est pas toujours configuré.
 current_script_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.dirname(current_script_dir)  # 
+project_root = os.path.dirname(current_script_dir)  #
 # Les imports comme `from libraries...` nécessitent que `` soit dans sys.path.
 sys.path.insert(0, project_root)
 
