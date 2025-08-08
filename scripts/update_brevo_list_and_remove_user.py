@@ -77,9 +77,6 @@ if __name__ == "__main__":
         auth_client = AuthentikClient(base_url=AUTHENTIK_URL, token=AUTHENTIK_TOKEN)
         authentik_users = auth_client.get_all_users_data()
 
-        print("ON EST LA")
-        print(authentik_users)
-
         if authentik_users is not None:
             sync_authentik_users_to_brevo_list(authentik_users)
             # remove_inactive_users(["outline", "nocodb", "mattermost", "vaultwarden"], authentik_users)
