@@ -105,9 +105,7 @@ class BrevoService(SyncService):
                 if found_folder_id:
                     folder_id = found_folder_id
                 else:
-                    logging.warning(
-                        f"Brevo folder '{folder_name}' not found. Defaulting to folder ID {folder_id}."
-                    )
+                    logging.warning(f"Brevo folder '{folder_name}' not found. Defaulting to folder ID {folder_id}.")
 
             brevo_list_obj = brevo_client.create_list(brevo_list_name, folder_id=folder_id)
             if not brevo_list_obj:
