@@ -280,46 +280,47 @@ class AuthentikClient:
         return all_users_data
 
     def get_all_users_pk_by_email(self) -> dict[str, int]:
-            """
-            Fetches all users from Authentik and returns a dictionary
-            mapping their email address to their primary key (pk).
-            """
-            if not self.base_url or not self.token:
-                logging.error("Authentik client not configured (URL or Token missing).")
+        """
+        Fetches all users from Authentik and returns a dictionary
+        mapping their email address to their primary key (pk).
+        """
+        if not self.base_url or not self.token:
+            logging.error("Authentik client not configured (URL or Token missing).")
+            return {}
+
+        email_to_pk_map = {}
+        current_url = f"{self.base_url}/api/v3/core/users/"
+        logging.info(f"Fetching all Authentik users to build email-to-PK map from {current_url}")
+
+        page_count = 0
+        while current_url:
+            page_count += 1
+            logging.debug(f"Fetching user page {page_count} from {current_url}")
+            try:
+                response = requests.get(current_url, headers=self.headers)
+                response.raise_for_status()
+                data = response.json()
+
+                page_users = data.get("results", [])
+                for user in page_users:
+                    email = user.get("email")
+                    pk = user.get("pk")
+                    if email and pk is not None:
+                        # Emails in Authentik should be unique. If not, this will overwrite.
+                        email_to_pk_map[email.lower()] = pk
+
+                current_url = data.get("pagination", {}).get("next")
+
+            except requests.exceptions.RequestException as e:
+                logging.error(f"Error fetching Authentik users from {current_url}: {e}")
+                return {}  # Return empty dict on error
+            except json.JSONDecodeError as e:
+                logging.error(f"Error decoding JSON from Authentik users response ({current_url}): {e}")
                 return {}
 
-            email_to_pk_map = {}
-            current_url = f"{self.base_url}/api/v3/core/users/"
-            logging.info(f"Fetching all Authentik users to build email-to-PK map from {current_url}")
+        logging.info(f"Built email-to-PK map for {len(email_to_pk_map)} users from Authentik.")
+        return email_to_pk_map
 
-            page_count = 0
-            while current_url:
-                page_count += 1
-                logging.debug(f"Fetching user page {page_count} from {current_url}")
-                try:
-                    response = requests.get(current_url, headers=self.headers)
-                    response.raise_for_status()
-                    data = response.json()
-
-                    page_users = data.get("results", [])
-                    for user in page_users:
-                        email = user.get("email")
-                        pk = user.get("pk")
-                        if email and pk is not None:
-                            # Emails in Authentik should be unique. If not, this will overwrite.
-                            email_to_pk_map[email.lower()] = pk
-
-                    current_url = data.get("pagination", {}).get("next")
-
-                except requests.exceptions.RequestException as e:
-                    logging.error(f"Error fetching Authentik users from {current_url}: {e}")
-                    return {}  # Return empty dict on error
-                except json.JSONDecodeError as e:
-                    logging.error(f"Error decoding JSON from Authentik users response ({current_url}): {e}")
-                    return {}
-
-            logging.info(f"Built email-to-PK map for {len(email_to_pk_map)} users from Authentik.")
-            return email_to_pk_map
 
 if __name__ == "__main__":
     import os

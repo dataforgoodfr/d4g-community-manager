@@ -176,7 +176,6 @@ async def orchestrate_group_synchronization(
                     "is_admin_channel_member": True,
                 }
 
-
         for service in services:
             if service.client and service.SERVICE_NAME.lower() not in skip_services:
                 service_results = await service.group_sync(

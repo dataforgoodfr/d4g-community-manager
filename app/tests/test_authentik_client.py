@@ -427,7 +427,7 @@ class TestAuthentikClient(unittest.TestCase):
         for user_data_dict in users_data:
             self.assertNotEqual(user_data_dict.get("attributes", {}).get("ville"), "Inconnue")
 
-   # Tests for get_all_users_pk_by_email
+    # Tests for get_all_users_pk_by_email
     @patch("requests.get")
     def test_get_all_users_pk_by_email_success(self, mock_get):
         mock_response_data = {
@@ -446,7 +446,7 @@ class TestAuthentikClient(unittest.TestCase):
 
         self.assertEqual(len(pk_map), 2)
         self.assertEqual(pk_map["user1@example.com"], 1)
-        self.assertEqual(pk_map["user2@example.com"], 2) # Check lowercasing
+        self.assertEqual(pk_map["user2@example.com"], 2)  # Check lowercasing
         self.assertNotIn("user3_no_email", pk_map)
 
     @patch("requests.get")
@@ -454,6 +454,7 @@ class TestAuthentikClient(unittest.TestCase):
         mock_get.side_effect = requests.exceptions.RequestException("API error")
         pk_map = self.client.get_all_users_pk_by_email()
         self.assertEqual(pk_map, {})
+
 
 if __name__ == "__main__":
     unittest.main()

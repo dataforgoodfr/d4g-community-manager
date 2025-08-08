@@ -73,9 +73,7 @@ class TestGroupSyncServices(unittest.TestCase):
             adm_mm_channel_obj,
         ]
 
-        self.mock_authentik_client.get_all_users_pk_by_email.return_value = {
-            "user@test.com": 123
-        }
+        self.mock_authentik_client.get_all_users_pk_by_email.return_value = {"user@test.com": 123}
 
         mock_lib_config.PERMISSIONS_MATRIX = {
             "PROJET": {
