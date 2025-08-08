@@ -73,6 +73,8 @@ class TestGroupSyncServices(unittest.TestCase):
             adm_mm_channel_obj,
         ]
 
+        self.mock_authentik_client.get_all_users_pk_by_email.return_value = {"user@test.com": 123}
+
         mock_lib_config.PERMISSIONS_MATRIX = {
             "PROJET": {
                 "standard": {
@@ -94,6 +96,7 @@ class TestGroupSyncServices(unittest.TestCase):
             "nocodb": self.mock_nocodb_client,
             "vaultwarden": self.mock_vaultwarden_client,
         }
+        clients["authentik"].get_groups_with_users.return_value = ([], {})
         success, detailed_results = await orchestrate_group_synchronization(
             clients=clients,
             mm_team_id=mock_team_id,
