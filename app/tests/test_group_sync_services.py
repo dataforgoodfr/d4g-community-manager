@@ -309,6 +309,8 @@ permissions:
     def test_sync_brevo_list_creation_and_user_add(self, mock_lib_config_brevo):
         mock_lib_config_brevo.EXCLUDED_USERS = set()
         brevo_list_name = "TestBrevoList1"
+        folder_name = "projets"
+        folder_id = 123
         mm_users = [
             {"username": "brevo_user1", "email": "brevo1@example.com"},
             {"username": "brevo_user2", "email": "brevo2@example.com"},
@@ -316,6 +318,7 @@ permissions:
         mm_channel_name_log = "MMChannelForBrevo1"
 
         self.mock_brevo_client.get_lists.return_value = []  # List does not exist
+        self.mock_brevo_client.get_folder_id_by_name.return_value = folder_id
         # Use the ID pattern from the mock_brevo_client.create_list setup
         expected_created_list_id = f"new_brevo_list_id_for_{slugify(brevo_list_name)}"
         created_list_obj_for_test = {
@@ -331,10 +334,12 @@ permissions:
             brevo_list_name,
             mm_users,
             mm_channel_name_log,
+            folder_name=folder_name,
         )
 
         self.mock_brevo_client.get_lists.assert_called_once_with(name=brevo_list_name)
-        self.mock_brevo_client.create_list.assert_called_once_with(brevo_list_name)
+        self.mock_brevo_client.get_folder_id_by_name.assert_called_once_with(folder_name)
+        self.mock_brevo_client.create_list.assert_called_once_with(brevo_list_name, folder_id=folder_id)
         self.assertEqual(self.mock_brevo_client.add_contact_to_list.call_count, 2)
         self.mock_brevo_client.add_contact_to_list.assert_any_call(
             email="brevo1@example.com", list_id=expected_created_list_id
@@ -396,6 +401,7 @@ permissions:
         brevo_list_name,
         mm_users,
         mm_channel_name_log,
+        folder_name=None,
     ):
         """Helper to call the static _sync_single_brevo_list method for testing."""
         from libraries.services.brevo import BrevoService
@@ -406,6 +412,7 @@ permissions:
             brevo_list_name=brevo_list_name,
             mm_users_in_channel=mm_users,
             mm_channel_display_name_for_log=mm_channel_name_log,
+            folder_name=folder_name,
         )
 
     # --- Tests for NocoDB base synchronization ---
