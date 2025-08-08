@@ -824,12 +824,10 @@ permissions:
         )
 
         self.mock_vaultwarden_client.get_collection_by_name.assert_called_once_with(collection_name)
-        self.mock_vaultwarden_client._get_api_token.assert_called_once()
         self.mock_vaultwarden_client.invite_user_to_collection.assert_called_once_with(
             user_email="vw.user1@example.com",
             collection_id="vw_coll_id_123",
             organization_id=self.mock_vaultwarden_client.organization_id,
-            access_token="fake_vw_api_token",
         )
         self.mock_mattermost_client.send_dm.assert_called_once()
         dm_call_args = self.mock_mattermost_client.send_dm.call_args[0]
