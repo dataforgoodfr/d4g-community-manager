@@ -29,8 +29,6 @@ def _map_authentik_attributes_to_brevo(authentik_attrs: dict) -> dict:
     Maps Authentik attribute keys to Brevo attribute keys (in uppercase)
     and handles the 'attributes.' prefix from Authentik.
     """
-    print("ON RENTRE DANS ATTRIBUTES")
-    print(authentik_attrs)
     if not authentik_attrs:
         return {}
 
@@ -113,9 +111,7 @@ def sync_authentik_users_to_brevo_list(authentik_users_data: list):
             logging.debug(
                 f"Upserting '{auth_email_lower}' to Brevo list {brevo_list_id} with attributes: {brevo_attributes}"
             )
-            print("ON EST ICI")
-            print(brevo_attributes)
-            print(auth_email_lower)
+
             success = brevo_client.add_contact_to_list(
                 email=auth_email_lower,
                 list_id=brevo_list_id,
