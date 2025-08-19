@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-    # optionnel : publier seulement si Dockerfile est modifié
     paths:
       - 'Dockerfile'
       - '.github/workflows/docker-publish.yml'
