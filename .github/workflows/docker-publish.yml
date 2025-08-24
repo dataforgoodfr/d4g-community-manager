@@ -6,9 +6,6 @@ on:
       - main
       - rs/add-build-image
       # add your branch name if you want an image with a tag :branch-name
-    paths:
-      - 'Dockerfile'
-      - '.github/workflows/docker-publish.yml'
 
 jobs:
   build-and-push:
