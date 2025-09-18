@@ -63,7 +63,7 @@ permissions:
       folder_name: "poles" # Placeholder, user should update
     nocodb:
       base_title_pattern: "Pole {base_name}"
-      default_access: "viewer"
+      default_access: "editor"
       admin_access: "owner"
     vaultwarden:
       collection_name_pattern: "Pole {base_name}"
