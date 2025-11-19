@@ -111,5 +111,6 @@ class TestOutlineClient2(unittest.TestCase):
         # Assert that send_dm was called
         mock_mattermost_client.send_dm.assert_called_once()
 
+
 if __name__ == "__main__":
     unittest.main()
