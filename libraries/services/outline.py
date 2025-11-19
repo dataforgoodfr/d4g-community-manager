@@ -69,10 +69,26 @@ class OutlineService(SyncService):
 
             outline_user_api = outline_client.get_user_by_email(email_lower)
             if not outline_user_api:
+                mm_user_id = mm_user_data.get("mm_user_id")
+                dm_sent = False
+                if mm_user_id and config.OUTLINE_URL:
+                    dm_message = (
+                        "Bonjour ! Pour finaliser la création de vos accès à notre base de connaissances (Outline), "
+                        "merci de vous y connecter une première fois en cliquant sur ce lien : "
+                        f"{config.OUTLINE_URL}. Une fois cette étape effectuée, vos droits seront automatiquement mis à jour."
+                    )
+                    if mattermost_client.send_dm(mm_user_id, dm_message):
+                        dm_sent = True
+
+                action = (
+                    "SKIPPED_USER_NOT_IN_OUTLINE_FOR_ENSURE_DM_SENT"
+                    if dm_sent
+                    else "SKIPPED_USER_NOT_IN_OUTLINE_FOR_ENSURE_DM_FAILED"
+                )
                 outline_result.update(
                     {
                         "status": SyncStatus.SKIPPED.value,
-                        "action": "SKIPPED_USER_NOT_IN_OUTLINE_FOR_ENSURE",
+                        "action": action,
                         "error_message": f"User email '{email_lower}' not found in Outline.",
                     }
                 )

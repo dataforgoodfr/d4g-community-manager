@@ -66,6 +66,50 @@ class TestOutlineClient2(unittest.TestCase):
         self.assertEqual(collections[2]["name"], "Third")
         self.assertEqual(mock_post.call_count, 2)
 
+    @patch("libraries.services.outline.config")
+    @patch("clients.mattermost_client.MattermostClient.send_dm")
+    def test_send_dm_if_user_not_in_outline(self, mock_send_dm, mock_config):
+        # Configure the mocks
+        mock_config.OUTLINE_URL = "http://fake-outline-url.com"
+        mock_send_dm.return_value = True
+
+        # Create a mock Mattermost client
+        mock_mattermost_client = Mock()
+        mock_mattermost_client.send_dm.return_value = True
+
+        # Create a mock Outline client
+        mock_outline_client = Mock()
+        mock_outline_client.get_user_by_email.return_value = None
+
+        # Call the method that should trigger the DM
+        from libraries.services.outline import OutlineService
+
+        outline_service = OutlineService(
+            client=mock_outline_client,
+            mattermost_client=mock_mattermost_client,
+            permissions_matrix={},
+            mm_team_id="test_team_id",
+        )
+        outline_service._ensure_users_in_outline_collection(
+            outline_client=mock_outline_client,
+            mattermost_client=mock_mattermost_client,
+            collection_id="some-collection-id",
+            collection_name="some-collection-name",
+            mm_users_for_permission={
+                "test@example.com": {
+                    "username": "testuser",
+                    "mm_user_id": "test_mm_user_id",
+                    "is_admin_channel_member": False,
+                }
+            },
+            default_permission="read",
+            admin_permission="read_write",
+            current_outline_member_ids=set(),
+            mm_channel_context_name="test-channel",
+        )
+
+        # Assert that send_dm was called
+        mock_mattermost_client.send_dm.assert_called_once()
 
 if __name__ == "__main__":
     unittest.main()
