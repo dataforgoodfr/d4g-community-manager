@@ -40,7 +40,9 @@ class MattermostClient:
         if self.login_id and self.password:
             self._login()
         else:
-            status_manager.update_status("Mattermost", "Not configured", "User login not configured for board operations.")
+            status_manager.update_status(
+                "Mattermost", "Not configured", "User login not configured for board operations."
+            )
 
     def _initialize_bot_user_id(self) -> None:
         """

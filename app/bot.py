@@ -43,7 +43,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return FileResponse('app/templates/status.html')
+    return FileResponse("app/templates/status.html")
 
 
 @app.get("/status")
@@ -53,8 +53,6 @@ def get_status():
 
 def start_web_server():
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
-
 
 
 class MartyBot:

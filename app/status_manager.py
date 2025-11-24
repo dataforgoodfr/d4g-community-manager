@@ -1,5 +1,6 @@
 import threading
 
+
 class StatusManager:
     _instance = None
     _lock = threading.Lock()
@@ -14,18 +15,19 @@ class StatusManager:
     def update_status(self, service: str, status: str, message: str = ""):
         if service not in self.statuses:
             self.statuses[service] = []
-        
+
         entry_exists = False
         for entry in self.statuses[service]:
             if entry.get("message") == message:
-                entry['status'] = status
+                entry["status"] = status
                 entry_exists = True
                 break
-        
+
         if not entry_exists:
             self.statuses[service].append({"status": status, "message": message})
 
     def get_all_statuses(self):
         return self.statuses
+
 
 status_manager = StatusManager()
