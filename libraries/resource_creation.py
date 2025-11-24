@@ -289,6 +289,24 @@ async def create_resources_for_entity(
         else:
             vw_msg += ":information_source: Client non configuré."
         item_results_log.append(vw_msg)
+        
+    # GitHub Repo
+    github_config = entity_config.get("github")
+    if github_config and github_config.get("create"):
+        repo_name_pattern = github_config.get("repo_name_pattern", "{base_name}")
+        repo_name = repo_name_pattern.format(base_name=base_name)
+        github_msg = f"  - GitHub Repo `{repo_name}`: "
+        if clients.get("github"):
+            try:
+                if clients.get("github").create_repo(repo_name):
+                    github_msg += ":white_check_mark: Créé."
+                else:
+                    github_msg += ":warning: Échec/Existe déjà."
+            except Exception as e:
+                github_msg += f":x: Erreur ({e})."
+        else:
+            github_msg += ":information_source: Client non configuré."
+        item_results_log.append(github_msg)
 
     return item_results_log
 

@@ -84,6 +84,7 @@ class MartyBot:
         self.brevo_client = clients.get("brevo")
         self.nocodb_client = clients.get("nocodb")
         self.vaultwarden_client = clients.get("vaultwarden")
+        self.github_client = clients.get("github")
 
         self.websocket_handler = WebsocketHandler(self)
 

@@ -16,6 +16,7 @@ class CreateProjetCommand(BaseCommand):
             "brevo": self.bot.brevo_client,
             "nocodb": self.bot.nocodb_client,
             "vaultwarden": self.bot.vaultwarden_client,
+            "github": self.bot.github_client,
         }
         await execute_batch_create_command(
             channel_id,

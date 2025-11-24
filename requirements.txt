@@ -5,3 +5,4 @@ PyYAML
 markdown2
 fastapi
 uvicorn
+PyGithub
