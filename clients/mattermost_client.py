@@ -1,6 +1,6 @@
 import json
 import logging  # Added logging
-
+from app.status_manager import status_manager
 import requests
 from libraries.services.mattermost import slugify
 
@@ -39,6 +39,10 @@ class MattermostClient:
         self.csrf_token: str | None = None
         if self.login_id and self.password:
             self._login()
+        else:
+            status_manager.update_status(
+                "Mattermost", "Not configured", "User login not configured for board operations."
+            )
 
     def _initialize_bot_user_id(self) -> None:
         """
@@ -50,11 +54,13 @@ class MattermostClient:
         if user_details and user_details.get("id"):
             self.bot_user_id = user_details["id"]
             logging.info(f"MattermostClient: Bot User ID initialized to {self.bot_user_id}")
+            status_manager.update_status("Mattermost", "OK", "Bot User ID initialized successfully.")
         else:
             self.bot_user_id = None  # Ensure it's None if fetching failed
             logging.error(
                 "MattermostClient: FAILED to fetch Bot User ID. Direct messaging functionality will be impaired."
             )
+            status_manager.update_status("Mattermost", "Error", "Failed to fetch Bot User ID.")
             # Depending on requirements, one might raise an error here if bot_user_id is critical for all operations
 
     def get_me(self) -> dict | None:
@@ -634,12 +640,17 @@ class MattermostClient:
             self.csrf_token = response.cookies.get("MMCSRF")
             if self.user_auth_token and self.csrf_token:
                 logging.info("MattermostClient: Successfully logged in and got CSRF and Auth tokens.")
+                status_manager.update_status("Mattermost", "OK", "User login for board operations successful.")
             else:
                 logging.error(
                     "MattermostClient: Login successful, but failed to get MMAUTHTOKEN or MMCSRF from cookies."
                 )
+                status_manager.update_status(
+                    "Mattermost", "Error", "Failed to get auth tokens from cookies after login."
+                )
         except requests.exceptions.RequestException as e:
             logging.error(f"MattermostClient: Error during login to get CSRF token: {e}")
+            status_manager.update_status("Mattermost", "Error", f"User login for board operations failed: {e}")
 
     def _get_focalboard_headers(self) -> dict | None:
         """Helper to get headers for Focalboard API calls."""
