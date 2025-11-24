@@ -10,6 +10,7 @@ from clients.nocodb_client import NocoDBClient
 from clients.outline_client import OutlineClient
 from clients.vaultwarden_client import VaultwardenClient
 
+
 def create_clients() -> dict:
     """
     Initializes and returns a dictionary of API clients.
@@ -119,7 +120,7 @@ def create_clients() -> dict:
     else:
         logging.warning("Vaultwarden Organization ID not configured. Vaultwarden features will be disabled.")
         status_manager.update_status("Vaultwarden", "Not configured", "Organization ID not configured.")
-    
+
     if config.GITHUB_TOKEN and config.GITHUB_ORGANIZATION:
         try:
             clients["github"] = GithubClient(config.GITHUB_TOKEN, config.GITHUB_ORGANIZATION)

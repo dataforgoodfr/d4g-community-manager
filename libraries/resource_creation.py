@@ -289,7 +289,7 @@ async def create_resources_for_entity(
         else:
             vw_msg += ":information_source: Client non configuré."
         item_results_log.append(vw_msg)
-        
+
     # GitHub Repo
     github_config = entity_config.get("github")
     if github_config and github_config.get("create"):
