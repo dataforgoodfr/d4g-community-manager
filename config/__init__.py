@@ -115,3 +115,7 @@ else:
 #     logging.info(f"PROJET Mattermost channel type: {projet_mattermost_type}")
 # else:
 #     logging.info("PROJET settings or Mattermost channel type not found in matrix.")
+
+# GitHub settings
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_ORGANIZATION = os.getenv("GITHUB_ORGANIZATION")

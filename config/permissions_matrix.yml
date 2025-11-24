@@ -21,6 +21,9 @@ permissions:
     mattermost_board:
       create: true
       board_name_pattern: "{base_name}"
+    github:
+      create: true
+      repo_name_pattern: "{base_name}"
 
   ANTENNE:
     standard:
