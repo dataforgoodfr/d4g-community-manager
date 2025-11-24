@@ -1,17 +1,20 @@
-# import os # No longer used
+import os
 import asyncio
 import json
 import logging
 import re  # Import re for regular expressions
 
-# import signal  # No longer used directly in MartyBot class after removing signal handlers
 import threading  # For logging current thread name in start()
 
 import config
 
 # import threading # No longer used
 import requests
+import uvicorn
+from app.status_manager import status_manager
 from app.websocket_handler import WebsocketHandler
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
 
 # Configure basic logging based on DEBUG status
 # This initial basicConfig is for any logging before MartyBot instance is created
@@ -33,6 +36,25 @@ from app.user_right_manager import UserRightManager
 
 # Import client classes
 from clients.client_factory import create_clients
+
+
+app = FastAPI()
+
+
+@app.get("/")
+def read_root():
+    return FileResponse('app/templates/status.html')
+
+
+@app.get("/status")
+def get_status():
+    return status_manager.get_all_statuses()
+
+
+def start_web_server():
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+
 
 
 class MartyBot:
@@ -78,6 +100,11 @@ class MartyBot:
         self.command_factory = CommandFactory(self)
         self.result_manager = ResultManager(self)
         self.user_right_manager = UserRightManager(self)
+
+        if "PYTEST_CURRENT_TEST" not in os.environ:
+            self.web_server_thread = threading.Thread(target=start_web_server, daemon=True)
+            self.web_server_thread.start()
+            logging.info("FastAPI server started in a background thread.")
 
     def _request_shutdown(self):
         logging.info("Shutdown requested. Setting shutdown event.")

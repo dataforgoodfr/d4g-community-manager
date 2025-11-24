@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Status</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2em;
+        }
+        .status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .status-ok { background-color: green; }
+        .status-error { background-color: red; }
+        .status-not-configured { background-color: gray; }
+        .service {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Client Status</h1>
+    <div id="status-container"></div>
+
+    <script>
+        async function fetchStatus() {
+            const response = await fetch('/status');
+            const data = await response.json();
+            const container = document.getElementById('status-container');
+            container.innerHTML = '';
+
+            for (const service in data) {
+                const serviceDiv = document.createElement('div');
+                serviceDiv.className = 'service';
+                
+                const title = document.createElement('h2');
+                title.textContent = service;
+                serviceDiv.appendChild(title);
+
+                data[service].forEach(item => {
+                    const p = document.createElement('p');
+                    const statusSpan = document.createElement('span');
+                    statusSpan.className = 'status status-' + item.status.toLowerCase().replace(' ', '-');
+                    p.appendChild(statusSpan);
+                    p.append(item.message);
+                    serviceDiv.appendChild(p);
+                });
+
+                container.appendChild(serviceDiv);
+            }
+        }
+
+        fetchStatus();
+        setInterval(fetchStatus, 5000); // Refresh every 5 seconds
+    </script>
+</body>
+</html>
