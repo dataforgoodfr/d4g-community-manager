@@ -23,7 +23,7 @@ class GithubClient:
         """
         try:
             org = self.g.get_organization(self.organization)
-            org.create_repo(repo_name, private=True)
+            org.create_repo_from_template(repo_name, org.get_repo("d4g-project-template"), private=False)
             logging.info(f"Successfully created repository '{repo_name}' in organization '{self.organization}'.")
             return True
         except GithubException as e:
