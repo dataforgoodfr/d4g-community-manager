@@ -27,29 +27,39 @@ class TestGithubClient(unittest.TestCase):
 
     @patch("clients.github_client.Github")
     def test_create_repo_success(self, mock_github):
-        """Test successful repository creation."""
+        """Test successful repository creation from template."""
         mock_g_instance = MagicMock()
         mock_org = MagicMock()
+        mock_template_repo = MagicMock()
+
         mock_github.return_value = mock_g_instance
         mock_g_instance.get_organization.return_value = mock_org
+        mock_org.get_repo.return_value = mock_template_repo
 
         client = GithubClient(token="fake-token", organization="fake-org")
         result = client.create_repo("new-repo")
 
         self.assertTrue(result)
         mock_g_instance.get_organization.assert_called_once_with("fake-org")
-        mock_org.create_repo.assert_called_once_with("new-repo", private=True)
+        mock_org.get_repo.assert_called_once_with("d4g-project-template")
+        mock_org.create_repo_from_template.assert_called_once_with(
+            "new-repo",
+            mock_template_repo,
+            private=False,
+        )
 
     @patch("clients.github_client.Github")
     def test_create_repo_already_exists(self, mock_github):
         """Test repository creation when it already exists."""
         mock_g_instance = MagicMock()
         mock_org = MagicMock()
+        mock_template_repo = MagicMock()
+
         mock_github.return_value = mock_g_instance
         mock_g_instance.get_organization.return_value = mock_org
+        mock_org.get_repo.return_value = mock_template_repo
 
-        # Simulate GithubException for existing repo
-        mock_org.create_repo.side_effect = GithubException(
+        mock_org.create_repo_from_template.side_effect = GithubException(
             status=422,
             data={
                 "message": "Repository creation failed.",
@@ -68,21 +78,30 @@ class TestGithubClient(unittest.TestCase):
         client = GithubClient(token="fake-token", organization="fake-org")
         result = client.create_repo("existing-repo")
 
-        self.assertTrue(result)  # Should be considered a success
+        self.assertTrue(result)
         mock_g_instance.get_organization.assert_called_once_with("fake-org")
-        mock_org.create_repo.assert_called_once_with("existing-repo", private=True)
+        mock_org.get_repo.assert_called_once_with("d4g-project-template")
+        mock_org.create_repo_from_template.assert_called_once_with(
+            "existing-repo",
+            mock_template_repo,
+            private=False,
+        )
 
     @patch("clients.github_client.Github")
     def test_create_repo_generic_error(self, mock_github):
         """Test repository creation with a generic GithubException."""
         mock_g_instance = MagicMock()
         mock_org = MagicMock()
+        mock_template_repo = MagicMock()
+
         mock_github.return_value = mock_g_instance
         mock_g_instance.get_organization.return_value = mock_org
+        mock_org.get_repo.return_value = mock_template_repo
 
-        # Simulate a generic GithubException
-        mock_org.create_repo.side_effect = GithubException(
-            status=500, data={"message": "Internal Server Error"}, headers=None
+        mock_org.create_repo_from_template.side_effect = GithubException(
+            status=500,
+            data={"message": "Internal Server Error"},
+            headers=None,
         )
 
         client = GithubClient(token="fake-token", organization="fake-org")
@@ -90,7 +109,12 @@ class TestGithubClient(unittest.TestCase):
 
         self.assertFalse(result)
         mock_g_instance.get_organization.assert_called_once_with("fake-org")
-        mock_org.create_repo.assert_called_once_with("error-repo", private=True)
+        mock_org.get_repo.assert_called_once_with("d4g-project-template")
+        mock_org.create_repo_from_template.assert_called_once_with(
+            "error-repo",
+            mock_template_repo,
+            private=False,
+        )
 
     @patch("clients.github_client.Github")
     def test_close_connection(self, mock_github):
