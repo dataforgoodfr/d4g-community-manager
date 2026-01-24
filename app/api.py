@@ -11,7 +11,6 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-
     authenthik_client = AuthentikClient(
         base_url=config.AUTHENTIK_URL,
         token=config.AUTHENTIK_TOKEN,
@@ -29,6 +28,36 @@ def read_root():
         "authentik": authenthik_client.get_all_users_data(),
         "mattermost": mattermost_client.list_users(),
         "outline": outline_client.list_collections(),
+    }
+
+
+@app.get("/api/users")
+def list_users():
+    authenthik_client = AuthentikClient(
+        base_url=config.AUTHENTIK_URL,
+        token=config.AUTHENTIK_TOKEN,
+    )
+    all_groups = authenthik_client.get_groups_with_users()[0]
+    all_users = []
+    for group in all_groups:
+        for user in group["users_obj"]:
+            user_data = user.copy()
+            user_data["authentik_group"] = group["name"]
+            all_users.append(user_data)
+    return {
+        "users": [
+            {
+                "id": -1,
+                "pk_id": user["pk"],
+                "username": user["username"],
+                "email": user["email"],
+                "projects": [],
+                "authentik_group": user["authentik_group"],
+                "is_active": user["is_active"],
+            }
+            for user in all_users
+        ],
+        "count": len(all_users),
     }
 
 
