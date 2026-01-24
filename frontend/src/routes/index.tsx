@@ -3,25 +3,25 @@ import { verifySession } from "@/auth";
 import logo from "../logo.svg";
 
 export const Route = createFileRoute("/")({
-  beforeLoad: async ({ location }) => {
-    try {
-      const user = await verifySession();
-      if (!user) {
-        throw redirect({
-          to: "/login",
-          search: { redirect: location.href },
-        });
-      }
-      return { user };
-    } catch (error) {
-      if (isRedirect(error)) throw error;
+  // beforeLoad: async ({ location }) => {
+  //   try {
+  //     const user = await verifySession();
+  //     if (!user) {
+  //       throw redirect({
+  //         to: "/login",
+  //         search: { redirect: location.href },
+  //       });
+  //     }
+  //     return { user };
+  //   } catch (error) {
+  //     if (isRedirect(error)) throw error;
 
-      throw redirect({
-        to: "/login",
-        search: { redirect: location.href },
-      });
-    }
-  },
+  //     throw redirect({
+  //       to: "/login",
+  //       search: { redirect: location.href },
+  //     });
+  //   }
+  // },
   component: Home,
 });
 

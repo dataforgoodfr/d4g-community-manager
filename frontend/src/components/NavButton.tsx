@@ -12,7 +12,7 @@ type NavButtonProps = {
 export default function NavButton({
   to,
   onClick,
-  className = 'flex items-center gap-3 p-3 rounded-lg hover:bg-(--primary-foreground) transition-colors',
+  className = 'flex items-center gap-3 p-3 rounded-lg hover:bg-primary-foreground transition-colors',
   activeClassName = 'flex items-center gap-3 p-3 rounded-lg bg-white hover:bg-gray-100 text-(--primary) transition-colors',
   icon,
   children,
