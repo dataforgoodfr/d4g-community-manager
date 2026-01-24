@@ -3,7 +3,9 @@ from api.controller import project, user_controller
 
 api = FastAPI()
 
+
 api.include_router(user_controller.router, prefix="/v1")
+
 
 @api.get("/")
 def home():
