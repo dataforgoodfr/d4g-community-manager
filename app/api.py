@@ -60,7 +60,7 @@ def list_users():
     }
 
 
-@app.get("api/projects")
+@app.get("/api/projects")
 def get_all_projects():
     return {
         "data": mattermost_client.get_all_channels()
