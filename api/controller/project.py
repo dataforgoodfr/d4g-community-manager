@@ -1,13 +1,14 @@
-from fastapi import APIRouter, Depends
-from api.logic.user_logic import UserLogic
-from clients.authentik_client import AuthentikClient
-import api.deps as dependecies
+from fastapi import APIRouter
+from api.logic.project import Project
 
-router = APIRouter(
-    prefix="/user/projects",
-    tags=["User"]
-)
+router = APIRouter(prefix="/project", tags=["Project"])
+
 
 @router.get("/")
-def list_users(logic: UserLogic = Depends(dependecies.get_user_logic)):
-    return logic.get_projects_for_user("dpjnsxww4incxex1rbsrbykrnr")
+def list_projects():
+    return []
+
+
+@router.post("/", status_code=201)
+def create_project(project: Project):
+    return project
