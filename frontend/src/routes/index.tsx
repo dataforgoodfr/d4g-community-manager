@@ -1,6 +1,4 @@
 import { createFileRoute, isRedirect, redirect } from "@tanstack/react-router";
-import { verifySession } from "@/auth";
-import logo from "../logo.svg";
 import NavButton from "@/components/NavButton";
 
 export const Route = createFileRoute("/")({
