@@ -1,56 +1,16 @@
 "use client";
 
 import Drawer from "@mui/material/Drawer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Project } from "../lib/repository/types";
+import { getRepository } from "../lib/repository";
 
 export default function Home() {
-  const projects: Project[] = [
-    {
-      id: 1,
-      pk_id: "pk_12345",
-      name: "Project Alpha",
-      description: "This is the first project.",
-      season: "Spring 2024",
-      users: [
-        {
-          id: 1,
-          username: "John Doe",
-          email: "john.doe@example.com",
-        },
-        {
-          id: 3,
-          username: "John Doe 2",
-          email: "john.doe2@example.com",
-        },
-        {
-          id: 4,
-          username: "John Doe 3",
-          email: "john.doe3@example.com",
-        },
-        {
-          id: 5,
-          username: "John Doe 4",
-          email: "john.doe4@example.com",
-        },
-      ],
-    },
-    {
-      id: 2,
-      pk_id: "pk_67890",
-      name: "Project Beta",
-      description: "This is the second project.",
-      season: "Summer 2026",
-      users: [
-        {
-          id: 2,
-          username: "Jane Smith",
-          email: "jane.smith@example.com",
-        },
-      ],
-    },
-  ];
+  const [projects, setProjects] = useState<Project[]>([]);
+  useEffect(() => {
+    getRepository().getProjects().then(setProjects);
+  }, []);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -123,7 +83,7 @@ const DrawerContent = ({ project }: { project: Project }) => {
     defaultValues: project,
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: unknown) => {
     console.log(data);
   };
 

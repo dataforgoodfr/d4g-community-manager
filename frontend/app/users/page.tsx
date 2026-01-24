@@ -1,42 +1,16 @@
 "use client";
 
 import { Drawer } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { User } from "../lib/repository/types";
+import { getRepository } from "../lib/repository";
 
 export default function Home() {
-  const users: User[] = [
-    {
-      id: 1,
-      pk_id: "pk_12345",
-      username: "John Doe",
-      email: "john.doe@example.com",
-      projects: [
-        "Project A",
-        "Project B",
-        "Project A",
-        "Project B",
-        "Project A",
-        "Project B",
-        "Project A",
-        "Project B",
-        "Project A",
-        "Project B",
-      ],
-      authentik_group: "Group 1",
-      is_active: true,
-    },
-    {
-      id: 2,
-      pk_id: "pk_67890",
-      username: "Jane Smith",
-      email: "jane.smith@example.com",
-      projects: ["Project C"],
-      authentik_group: "Group 2",
-      is_active: false,
-    },
-  ];
+  const [users, setUsers] = useState<User[]>([]);
+  useEffect(() => {
+    getRepository().getUsers().then(setUsers);
+  }, []);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -110,7 +84,7 @@ export default function Home() {
 const DrawerContent = ({ user }: { user: User }) => {
   const { register, handleSubmit } = useForm<User>({ defaultValues: user });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: unknown) => {
     console.log(data);
   };
 
