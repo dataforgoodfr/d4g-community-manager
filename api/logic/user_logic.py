@@ -22,6 +22,7 @@ class UserLogic:
         user_objects = []
         for user_data in raw_users:
             user_obj = User(
+                username=user_data.get("username"),
                 email=user_data.get("email"),
                 attributes=user_data.get("attributes", {})
             )

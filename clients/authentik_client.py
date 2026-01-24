@@ -261,9 +261,10 @@ class AuthentikClient:
                 page_users = data.get("results", [])
                 for user in page_users:
                     email = user.get("email")
-                    attributes = user.get("attributes", {})  # Default to empty dict if no attributes
-                    if email:  # Only include users with an email
-                        all_users_data.append({"email": email, "attributes": attributes})
+                    username = user.get("username")
+                    attributes = attributes = {k: v for k, v in user.items() if k not in ['email', 'username']}
+                    if email:
+                        all_users_data.append({"username": username, "email": email, "attributes": attributes})
 
                 current_url = data.get("pagination", {}).get("next")
                 if current_url:
