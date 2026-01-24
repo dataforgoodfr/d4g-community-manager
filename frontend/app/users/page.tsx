@@ -1,6 +1,6 @@
 "use client";
 
-import { Drawer } from "@mui/material";
+import { Drawer, Input } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { User } from "../lib/repository/types";
@@ -12,15 +12,29 @@ export default function Home() {
     getRepository().getUsers().then(setUsers);
   }, []);
 
+  const [filterKey, setFilterKey] = useState<string>("");
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  function filterUserFn(value: User): boolean {
+    return `${value.username}${value.projects}${value.email}${value.id}${value.authentik_group}`
+      .toLocaleLowerCase()
+      .includes(filterKey.toLocaleLowerCase());
+  }
 
   // TODO: thead fix : https://stackoverflow.com/questions/21168521/table-fixed-header-and-scrollable-body
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold">Users</h1>
-
+      <div className="flex-col">
+        <h1 className="text-2xl font-bold">Users</h1>
+        <Input
+          type="text"
+          placeholder="filter users"
+          onChange={(e) => setFilterKey(e.target.value)}
+        />
+      </div>
       <table className="table-auto border-collapse border border-gray-300">
         <thead>
           <tr>
@@ -37,7 +51,7 @@ export default function Home() {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {users.filter(filterUserFn).map((user) => (
             <tr key={user.id}>
               <td className="border border-gray-300 px-4 py-2">{user.id}</td>
               <td className="border border-gray-300 px-4 py-2">{user.pk_id}</td>
