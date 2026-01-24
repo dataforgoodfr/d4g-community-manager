@@ -10,7 +10,9 @@ import { getRepository } from "../lib/repository";
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
   useEffect(() => {
-    getRepository().getUsers().then(setUsers);
+    getRepository()
+      .getUsers()
+      .then((v) => setUsers(v.users));
   }, []);
 
   const [filterKey, setFilterKey] = useState<string>("");
@@ -24,6 +26,7 @@ export default function Home() {
       .includes(filterKey.toLocaleLowerCase());
   }
 
+  console.log(users);
   // TODO: thead fix : https://stackoverflow.com/questions/21168521/table-fixed-header-and-scrollable-body
 
   return (
@@ -48,9 +51,7 @@ export default function Home() {
             <th className="border border-gray-300 px-4 py-2">Username</th>
             <th className="border border-gray-300 px-4 py-2">Email</th>
             <th className="border border-gray-300 px-4 py-2">Projects</th>
-            <th className="border border-gray-300 px-4 py-2">
-              Authentik Group
-            </th>
+            <th className="border border-gray-300 px-4 py-2">Authentik Group</th>
             <th className="border border-gray-300 px-4 py-2">Is Active</th>
             <th className="border border-gray-300 px-4 py-2">Edit</th>
           </tr>
@@ -60,19 +61,11 @@ export default function Home() {
             <tr key={user.id}>
               <td className="border border-gray-300 px-4 py-2">{user.id}</td>
               <td className="border border-gray-300 px-4 py-2">{user.pk_id}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                {user.username}
-              </td>
+              <td className="border border-gray-300 px-4 py-2">{user.username}</td>
               <td className="border border-gray-300 px-4 py-2">{user.email}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                {user.projects.join(", ")}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                {user.authentik_group}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                {user.is_active ? "Yes" : "No"}
-              </td>
+              <td className="border border-gray-300 px-4 py-2">{user.projects.join(", ")}</td>
+              <td className="border border-gray-300 px-4 py-2">{user.authentik_group}</td>
+              <td className="border border-gray-300 px-4 py-2">{user.is_active ? "Yes" : "No"}</td>
               <td className="border border-gray-300 px-4 py-2">
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -88,11 +81,7 @@ export default function Home() {
           ))}
         </tbody>
 
-        <Drawer
-          anchor="right"
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-        >
+        <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
           <DrawerContent user={selectedUser!} />
         </Drawer>
       </table>
@@ -113,36 +102,21 @@ const DrawerContent = ({ user }: { user: User }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <label className="flex flex-col">
           Username:
-          <input
-            type="text"
-            {...register("username")}
-            className="border border-gray-300 p-2 rounded"
-          />
+          <input type="text" {...register("username")} className="border border-gray-300 p-2 rounded" />
         </label>
         <label className="flex flex-col">
           Email:
-          <input
-            type="email"
-            {...register("email")}
-            className="border border-gray-300 p-2 rounded"
-          />
+          <input type="email" {...register("email")} className="border border-gray-300 p-2 rounded" />
         </label>
         <label className="flex flex-col">
           Authentik Group:
-          <input
-            type="text"
-            {...register("authentik_group")}
-            className="border border-gray-300 p-2 rounded"
-          />
+          <input type="text" {...register("authentik_group")} className="border border-gray-300 p-2 rounded" />
         </label>
         <label className="flex items-center gap-2">
           <input type="checkbox" {...register("is_active")} />
           Is Active
         </label>
-        <button
-          type="submit"
-          className="bg-green-500 text-white px-4 py-2 rounded"
-        >
+        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
           Save
         </button>
       </form>

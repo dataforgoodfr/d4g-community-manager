@@ -9,7 +9,9 @@ import { getRepository } from "../lib/repository";
 export default function Home() {
   const [projects, setProjects] = useState<Project[]>([]);
   useEffect(() => {
-    getRepository().getProjects().then(setProjects);
+    getRepository()
+      .getProjects()
+      .then((v) => setProjects(v.data));
   }, []);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -34,22 +36,12 @@ export default function Home() {
           {projects.map((project) => (
             <tr key={project.id}>
               <td className="border border-gray-300 px-4 py-2">{project.id}</td>
+              <td className="border border-gray-300 px-4 py-2">{project.pk_id}</td>
+              <td className="border border-gray-300 px-4 py-2">{project.name}</td>
+              <td className="border border-gray-300 px-4 py-2">{project.season}</td>
+              <td className="border border-gray-300 px-4 py-2">{project.description}</td>
               <td className="border border-gray-300 px-4 py-2">
-                {project.pk_id}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                {project.name}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                {project.season}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                {project.description}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                {project.users
-                  .map((user) => `${user.username} (${user.email})`)
-                  .join(", ")}
+                {project.users.map((user) => `${user.username} (${user.email})`).join(", ")}
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <button
@@ -67,11 +59,7 @@ export default function Home() {
         </tbody>
       </table>
 
-      <Drawer
-        anchor="right"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-      >
+      <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         <DrawerContent project={selectedProject!} />
       </Drawer>
     </div>
@@ -93,31 +81,17 @@ const DrawerContent = ({ project }: { project: Project }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <label className="flex flex-col">
           Project Name:
-          <input
-            type="text"
-            {...register("name")}
-            className="border border-gray-300 p-2 rounded"
-          />
+          <input type="text" {...register("name")} className="border border-gray-300 p-2 rounded" />
         </label>
         <label className="flex flex-col">
           Season:
-          <input
-            type="text"
-            {...register("season")}
-            className="border border-gray-300 p-2 rounded"
-          />
+          <input type="text" {...register("season")} className="border border-gray-300 p-2 rounded" />
         </label>
         <label className="flex flex-col">
           Description:
-          <textarea
-            {...register("description")}
-            className="border border-gray-300 p-2 rounded"
-          />
+          <textarea {...register("description")} className="border border-gray-300 p-2 rounded" />
         </label>
-        <button
-          type="submit"
-          className="bg-green-500 text-white px-4 py-2 rounded"
-        >
+        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
           Save
         </button>
       </form>

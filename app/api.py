@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from clients.authentik_client import AuthentikClient
 from clients.mattermost_client import MattermostClient
@@ -8,34 +9,33 @@ import config
 
 app = FastAPI()
 
-authenthik_client = AuthentikClient(
-        base_url=config.AUTHENTIK_URL,
-        token=config.AUTHENTIK_TOKEN,
-    )
-mattermost_client = MattermostClient(
-        base_url=config.MATTERMOST_URL,
-        token=config.BOT_TOKEN,
-        team_id=config.MATTERMOST_TEAM_ID,
-    )
-outline_client = OutlineClient(
-        base_url=config.OUTLINE_URL,
-        token=config.OUTLINE_TOKEN,
-    )
+origins = ["*"]
 
-@app.get("/")
-def read_root():    
-    return {
-        "authentik": authenthik_client.get_all_users_data(),
-        "mattermost": mattermost_client.list_users(),
-        "outline": outline_client.list_collections(),
-    }
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+authenthik_client = AuthentikClient(
+    base_url=config.AUTHENTIK_URL,
+    token=config.AUTHENTIK_TOKEN,
+)
+mattermost_client = MattermostClient(
+    base_url=config.MATTERMOST_URL,
+    token=config.BOT_TOKEN,
+    team_id=config.MATTERMOST_TEAM_ID,
+)
+outline_client = OutlineClient(
+    base_url=config.OUTLINE_URL,
+    token=config.OUTLINE_TOKEN,
+)
+
 
 @app.get("/api/users")
 def list_users():
-    authenthik_client = AuthentikClient(
-        base_url=config.AUTHENTIK_URL,
-        token=config.AUTHENTIK_TOKEN,
-    )
     all_groups = authenthik_client.get_groups_with_users()[0]
     all_users = []
     for group in all_groups:
@@ -62,8 +62,19 @@ def list_users():
 
 @app.get("/api/projects")
 def get_all_projects():
+    all_projects = mattermost_client.get_all_channels()
     return {
-        "data": mattermost_client.get_all_channels()
+        "data": [
+            {
+                "id": -1,
+                "pk_id": project["id"],
+                "name": project["display_name"],
+                "description": "Beautiful project",
+                "season": "N/A",
+                "users": [],
+            }
+            for project in all_projects
+        ]
     }
 
 
