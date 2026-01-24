@@ -3,6 +3,7 @@ interface Project {
   pk_id: string;
   name: string;
   description: string;
+  season: string;
   users: {
     id: number;
     username: string;
@@ -17,6 +18,7 @@ export default function Home() {
       pk_id: "pk_12345",
       name: "Project Alpha",
       description: "This is the first project.",
+      season: "Spring 2024",
       users: [
         {
           id: 1,
@@ -45,6 +47,7 @@ export default function Home() {
       pk_id: "pk_67890",
       name: "Project Beta",
       description: "This is the second project.",
+      season: "Summer 2026",
       users: [
         {
           id: 2,
@@ -56,14 +59,15 @@ export default function Home() {
   ];
 
   return (
-    <div>
-      <h1>Projects</h1>
+    <div className="flex flex-col gap-4">
+      <h1 className="text-2xl font-bold">Projects</h1>
       <table className="table-auto border-collapse border border-gray-300">
         <thead>
           <tr>
             <th className="border border-gray-300 px-4 py-2">ID</th>
             <th className="border border-gray-300 px-4 py-2">Pk ID</th>
             <th className="border border-gray-300 px-4 py-2">Project Name</th>
+            <th className="border border-gray-300 px-4 py-2">Season</th>
             <th className="border border-gray-300 px-4 py-2">Description</th>
             <th className="border border-gray-300 px-4 py-2">Users</th>
           </tr>
@@ -74,6 +78,7 @@ export default function Home() {
               <td className="border border-gray-300 px-4 py-2">{project.id}</td>
               <td className="border border-gray-300 px-4 py-2">{project.pk_id}</td>
               <td className="border border-gray-300 px-4 py-2">{project.name}</td>
+              <td className="border border-gray-300 px-4 py-2">{project.season}</td>
               <td className="border border-gray-300 px-4 py-2">{project.description}</td>
               <td className="border border-gray-300 px-4 py-2">
                 {project.users.map((user) => `${user.username} (${user.email})`).join(", ")}

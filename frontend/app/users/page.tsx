@@ -41,9 +41,12 @@ export default function Home() {
     },
   ];
 
+  // TODO: thead fix : https://stackoverflow.com/questions/21168521/table-fixed-header-and-scrollable-body
+
   return (
-    <div>
-      <h1>Users</h1>
+    <div className="flex flex-col gap-4">
+      <h1 className="text-2xl font-bold">Users</h1>
+
       <table className="table-auto border-collapse border border-gray-300">
         <thead>
           <tr>
