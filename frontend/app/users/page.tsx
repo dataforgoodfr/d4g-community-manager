@@ -10,9 +10,7 @@ import { getRepository } from "../lib/repository";
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
   useEffect(() => {
-    getRepository()
-      .getUsers()
-      .then((v) => setUsers(v.users));
+    getRepository().getUsers().then(setUsers);
   }, []);
 
   const [filterKey, setFilterKey] = useState<string>("");

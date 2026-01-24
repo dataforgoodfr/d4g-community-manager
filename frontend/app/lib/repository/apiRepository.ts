@@ -16,7 +16,7 @@ export class ApiRepository implements Repository {
     if (!res.ok) {
       throw new Error(`Failed to fetch users: ${res.status}`);
     }
-    return res.json();
+    return res.json().then((data) => data.users);
   }
 
   async getProjects(): Promise<Project[]> {
@@ -24,7 +24,7 @@ export class ApiRepository implements Repository {
     if (!res.ok) {
       throw new Error(`Failed to fetch projects: ${res.status}`);
     }
-    return res.json();
+    return res.json().then((data) => data.data);
   }
 
   async getUserById(id: string): Promise<User | undefined> {
