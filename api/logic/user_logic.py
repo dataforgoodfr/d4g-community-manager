@@ -30,9 +30,12 @@ class UserLogic:
             
         return user_objects
 
-    def get_projects_for_user(self, user_id) -> list[dict[str, Project]]:
+    def get_projects_for_user(self, user_name) -> list[dict[str, Project]]:
         """"
         Retrieves raw project data from the client and transforms it
         """
-        raw_projects = self.mattermost_client.get_channels_for_user(user_id)
+        raw_user_details = self.mattermost_client.get_user_by_username(user_name)
+        raw_projects = self.mattermost_client.get_channels_for_user(raw_user_details.get("id"))
         print(raw_projects)
+
+        return raw_projects
