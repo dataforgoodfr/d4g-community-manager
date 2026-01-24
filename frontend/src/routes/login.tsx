@@ -36,7 +36,7 @@ function Login() {
 
   return (
     <div className="text-center">
-      <header className="min-h-screen flex flex-col items-center justify-center bg-[#282c34] text-white text-[calc(10px+2vmin)]">
+      <header className="min-h-screen flex flex-col items-center justify-center bg-primary/70 text-white text-[calc(10px+2vmin)]">
         <h1 className="text-4xl mb-8">Data for Good Community Manager</h1>
         <p className="mb-8">Please log in to continue</p>
         <form onSubmit={handleSubmit} className="w-full max-w-sm text-left">
@@ -46,7 +46,7 @@ function Login() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 rounded text-white"
+              className="w-full px-3 py-2 rounded text-white border border-primary-foreground border rounded-xl"
               required
             />
           </label>
@@ -56,7 +56,7 @@ function Login() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 rounded text-white"
+              className="w-full px-3 py-2 rounded text-white border border-(--primary-foreground) border rounded-xl"
               required
             />
           </label>
@@ -64,7 +64,7 @@ function Login() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2 px-4 rounded w-full"
+            className="bg-primary hover:bg-primary/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2 px-4 rounded w-full"
           >
             {isSubmitting ? "Signing in..." : "Log in"}
           </button>
