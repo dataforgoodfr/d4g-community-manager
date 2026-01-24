@@ -27,10 +27,10 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <div className="text-center">
-      <header className="min-h-screen flex flex-col items-center justify-center bg-primary-background text-white text-[calc(10px+2vmin)]">
+      <main className="min-h-screen flex flex-col items-center justify-center bg-primary-background text-white text-[calc(10px+2vmin)]">
         <img
           src={"./logo.png"}
-          className="h-[5vmin] pointer-events-none"
+          className="h-[13vmin] pointer-events-none"
           alt="logo"
         />
         <div className="flex gap-4 mt-10 items-center">
@@ -41,7 +41,7 @@ function Home() {
             Projets
           </NavButton>
         </div>
-      </header>
+      </main>
     </div>
   );
 }
