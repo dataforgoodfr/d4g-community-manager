@@ -1,17 +1,11 @@
-import {
-  createFileRoute,
-  isRedirect,
-  redirect,
-  RouterProvider,
-} from "@tanstack/react-router";
+import { createFileRoute, isRedirect, redirect } from "@tanstack/react-router";
+import { verifySession } from "@/auth";
 import logo from "../logo.svg";
-import { AuthProvider, useAuth } from "@/auth";
-import { router } from "../main";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async ({ location }) => {
     try {
-      const user = await verifySession(); // might throw on network error
+      const user = await verifySession();
       if (!user) {
         throw redirect({
           to: "/login",
@@ -30,19 +24,6 @@ export const Route = createFileRoute("/")({
   },
   component: Home,
 });
-
-function InnerApp() {
-  const auth = useAuth();
-  return <RouterProvider router={router} context={{ auth }} />;
-}
-
-function App() {
-  return (
-    <AuthProvider>
-      <InnerApp />
-    </AuthProvider>
-  );
-}
 
 function Home() {
   return (

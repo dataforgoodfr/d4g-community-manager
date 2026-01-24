@@ -24,6 +24,10 @@ PROJECT_BOARD_TEMPLATE_ID = os.getenv("PROJECT_BOARD_TEMPLATE_ID")
 AUTHENTIK_URL = os.getenv("AUTHENTIK_URL")
 AUTHENTIK_TOKEN = os.getenv("AUTHENTIK_TOKEN")
 
+# Basic auth fallback (frontend username/password)
+BASIC_AUTH_USERNAME = os.getenv("BASIC_AUTH_USERNAME", "admin")
+BASIC_AUTH_PASSWORD = os.getenv("BASIC_AUTH_PASSWORD", "password")
+
 OUTLINE_URL = os.getenv("OUTLINE_URL")
 OUTLINE_TOKEN = os.getenv("OUTLINE_TOKEN")
 

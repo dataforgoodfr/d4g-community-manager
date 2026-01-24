@@ -1,8 +1,4 @@
-import {
-  Outlet,
-  createRootRoute,
-  createRootRouteWithContext,
-} from "@tanstack/react-router";
+import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 
@@ -13,6 +9,11 @@ interface AuthState {
   user: { id: string; username: string; email: string } | null;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
+  verifySession: () => Promise<{
+    id: string;
+    username: string;
+    email: string;
+  } | null>;
 }
 
 interface AuthenticationContext {
