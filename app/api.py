@@ -8,28 +8,27 @@ import config
 
 app = FastAPI()
 
-
-@app.get("/")
-def read_root():
-    authenthik_client = AuthentikClient(
+authenthik_client = AuthentikClient(
         base_url=config.AUTHENTIK_URL,
         token=config.AUTHENTIK_TOKEN,
     )
-    mattermost_client = MattermostClient(
+mattermost_client = MattermostClient(
         base_url=config.MATTERMOST_URL,
         token=config.BOT_TOKEN,
         team_id=config.MATTERMOST_TEAM_ID,
     )
-    outline_client = OutlineClient(
+outline_client = OutlineClient(
         base_url=config.OUTLINE_URL,
         token=config.OUTLINE_TOKEN,
     )
+
+@app.get("/")
+def read_root():    
     return {
         "authentik": authenthik_client.get_all_users_data(),
         "mattermost": mattermost_client.list_users(),
         "outline": outline_client.list_collections(),
     }
-
 
 @app.get("/api/users")
 def list_users():
@@ -58,6 +57,13 @@ def list_users():
             for user in all_users
         ],
         "count": len(all_users),
+    }
+
+
+@app.get("api/projects")
+def get_all_projects():
+    return {
+        "data": mattermost_client.get_all_channels()
     }
 
 
