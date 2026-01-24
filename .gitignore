@@ -46,6 +46,6 @@ secrets/
 *.pem
 
 # Frontend build outputs
-node_modules/
+node_modules
 package-lock.json
 routeTree.gen.ts
