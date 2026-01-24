@@ -7,4 +7,4 @@ api.include_router(user.router)
 
 @api.get("/")
 def home():
-    return {"message": "Bienvenue sur l'API principale"}
+    return {"message": "Bienvenue sur l'API D4G Community Manager"}
