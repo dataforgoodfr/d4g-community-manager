@@ -8,7 +8,7 @@ export const Route = createFileRoute('/projects')({
 function ProjectsPage() {
   return (
     <Main title="Tous les Projets">
-      <p>Page de gestion des projets — contenu à implémenter.</p>
+      <p>Page de gestion des projets</p>
     </Main>
   )
 }

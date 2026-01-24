@@ -49,3 +49,5 @@ secrets/
 node_modules
 package-lock.json
 routeTree.gen.ts
+
+example.json
