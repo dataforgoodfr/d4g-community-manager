@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from controller import user, project
+from api.controller import user, project
 
 api = FastAPI()
 
