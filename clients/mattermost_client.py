@@ -281,6 +281,91 @@ class MattermostClient:
         logging.info(f"Successfully fetched {len(all_users)} users from channel '{channel_id}'.")
         return all_users
 
+    def get_channels_for_user(self, user_id: str):
+        """Fetches user details for all members of a given channel_id, handling pagination."""
+        if not self.base_url or not self.token:
+            logging.error("Mattermost client not configured (URL or Token missing).")
+            return []
+        if not user_id:
+            logging.error("User ID must be provided to fetch channels for user.")
+            return []
+
+        all_channels = []
+        page = 0
+        per_page = 200  # Max users per page for Mattermost API
+
+        logging.debug(f"Fetching channels in Mattermost channel '{user_id}' (page size: {per_page})")
+
+        """{your-mattermost-url}/api/v4/users/{user_id}/teams/{team_id}/channels"""
+        url = f"{self.base_url}/api/v4/users/{user_id}/teams/o9hyz7uf13dxur199uh3eifckr/channels"
+        # logging.debug(f"Fetching page {page} of users for channel '{channel_id}' from {url}.")
+        try:
+            response = requests.get(url, headers=self.headers)
+            response.raise_for_status()
+            all_channels = response.json()
+
+        except requests.exceptions.HTTPError as e:
+            error_msg = (  # noqa: E501
+                f"HTTP error fetching users for channel '{user_id}' (page {page}): "
+                f"{e.response.status_code} - {e.response.text}"  # noqa: E501
+            )
+            logging.error(error_msg)
+            # Depending on desired behavior, could return partial list `all_users` or empty
+            return []
+        except requests.exceptions.RequestException as e:
+            logging.error(f"Error fetching users for Mattermost channel '{user_id}' (page {page}): {e}")
+            return []
+        except json.JSONDecodeError as e:
+            error_msg = (  # noqa: E501
+                f"Error decoding JSON from Mattermost users response "
+                f"(channel {user_id}, page {page}): {e}"  # noqa: E501
+            )
+            logging.error(error_msg)
+            return []
+
+        logging.info(f"Successfully fetched {len(all_channels)} users from team 'o9hyz7uf13dxur199uh3eifckr'.")
+        return all_channels
+
+    def get_user_by_username(self, user_name: str):
+        """Fetches user details based on username"""
+        if not self.base_url or not self.token:
+            logging.error("Mattermost client not configured (URL or Token missing).")
+            return []
+        if not user_name:
+            logging.error("User ID must be provided to fetch channels for user.")
+            return []
+        user_details = []
+        logging.debug(f"Fetching user for Mattermost username '{user_name}'")
+
+        """{your-mattermost-url}/api/v4/users/username/{username}"""
+        url = f"{self.base_url}/api/v4/users/username/{user_name}"
+        try:
+            response = requests.get(url, headers=self.headers)
+            response.raise_for_status()
+            user_details = response.json()
+
+        except requests.exceptions.HTTPError as e:
+            error_msg = (  # noqa: E501
+                f"HTTP error fetching users for channel '{user_name}'"
+                f"{e.response.status_code} - {e.response.text}"  # noqa: E501
+            )
+            logging.error(error_msg)
+            # Depending on desired behavior, could return partial list `all_users` or empty
+            return []
+        except requests.exceptions.RequestException as e:
+            logging.error(f"Error fetching users for Mattermost channel '{user_name}': {e}")
+            return []
+        except json.JSONDecodeError as e:
+            error_msg = (  # noqa: E501
+                f"Error decoding JSON from Mattermost users response "
+                f"(channel {user_name},: {e}"  # noqa: E501
+            )
+            logging.error(error_msg)
+            return []
+
+        logging.info(f"Successfully fetched {len(user_name)} username '...'.")
+        return user_details
+
     def create_direct_channel(self, other_user_id: str) -> str | None:
         """
         Creates a direct message (DM) channel between the bot and another user.
