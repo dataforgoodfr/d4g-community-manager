@@ -36,6 +36,5 @@ class UserLogic:
         """
         raw_user_details = self.mattermost_client.get_user_by_username(user_name)
         raw_projects = self.mattermost_client.get_channels_for_user(raw_user_details.get("id"))
-        print(raw_projects)
 
         return raw_projects

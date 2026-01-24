@@ -6,9 +6,9 @@ from api.model.project_model import Project
 router = APIRouter(prefix="/project", tags=["Project"])
 
 
-@router.get("/")
-def list_projects():
-    return []
+@router.get("/projectsByTeam/{team}")
+def list_projects(team : str, logic: ProjectLogic = Depends(dependencies.get_project_logic)):
+    return logic.get_projects_by_team(team)
 
 
 @router.post("/", status_code=201)
