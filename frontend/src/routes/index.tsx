@@ -1,16 +1,50 @@
-import { createFileRoute } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  isRedirect,
+  redirect,
+  RouterProvider,
+} from "@tanstack/react-router";
 import logo from "../logo.svg";
+import { AuthProvider, useAuth } from "@/auth";
+import { router } from "../main";
 
 export const Route = createFileRoute("/")({
-  loader: () => {
-    return {
-      title: "Home",
-    };
+  beforeLoad: async ({ location }) => {
+    try {
+      const user = await verifySession(); // might throw on network error
+      if (!user) {
+        throw redirect({
+          to: "/login",
+          search: { redirect: location.href },
+        });
+      }
+      return { user };
+    } catch (error) {
+      if (isRedirect(error)) throw error;
+
+      throw redirect({
+        to: "/login",
+        search: { redirect: location.href },
+      });
+    }
   },
-  component: App,
+  component: Home,
 });
 
+function InnerApp() {
+  const auth = useAuth();
+  return <RouterProvider router={router} context={{ auth }} />;
+}
+
 function App() {
+  return (
+    <AuthProvider>
+      <InnerApp />
+    </AuthProvider>
+  );
+}
+
+function Home() {
   return (
     <div className="text-center">
       <header className="min-h-screen flex flex-col items-center justify-center bg-[#282c34] text-white text-[calc(10px+2vmin)]">

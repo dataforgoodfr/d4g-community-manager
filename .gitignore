@@ -44,3 +44,7 @@ Thumbs.db
 secrets/
 *.key
 *.pem
+
+
+node_modules
+package-lock.json

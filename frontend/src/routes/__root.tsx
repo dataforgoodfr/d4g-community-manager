@@ -1,25 +1,40 @@
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+import {
+  Outlet,
+  createRootRoute,
+  createRootRouteWithContext,
+} from "@tanstack/react-router";
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { TanStackDevtools } from "@tanstack/react-devtools";
 
-import Header from '../components/Header'
+import Header from "../components/Header";
 
-export const Route = createRootRoute({
+interface AuthState {
+  isAuthenticated: boolean;
+  user: { id: string; username: string; email: string } | null;
+  login: (username: string, password: string) => Promise<void>;
+  logout: () => void;
+}
+
+interface AuthenticationContext {
+  auth: AuthState;
+}
+
+export const Route = createRootRouteWithContext<AuthenticationContext>()({
   component: () => (
     <>
       <Header />
       <Outlet />
       <TanStackDevtools
         config={{
-          position: 'bottom-right',
+          position: "bottom-right",
         }}
         plugins={[
           {
-            name: 'Tanstack Router',
+            name: "Tanstack Router",
             render: <TanStackRouterDevtoolsPanel />,
           },
         ]}
       />
     </>
   ),
-})
+});

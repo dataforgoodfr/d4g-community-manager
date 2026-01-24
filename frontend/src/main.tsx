@@ -7,9 +7,11 @@ import { routeTree } from "./routeTree.gen.ts";
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
 
-const router = createRouter({
+export const router = createRouter({
   routeTree,
-  context: {},
+  context: {
+    auth: undefined!,
+  },
   defaultPreload: "intent",
   scrollRestoration: true,
   defaultStructuralSharing: true,
@@ -27,7 +29,7 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <RouterProvider router={router} />
+      <RouterProvider router={router} context={{ auth: undefined }} />
     </StrictMode>,
   );
 }
