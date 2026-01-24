@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import Main from '../components/Main'
+import UsersTable from '../components/UsersTable'
 
 export const Route = createFileRoute('/users')({
   component: UsersPage,
@@ -8,7 +9,9 @@ export const Route = createFileRoute('/users')({
 function UsersPage() {
   return (
     <Main title="Tous les utilisateurs">
-      <p>Page de gestion des utilisateurs — contenu à implémenter.</p>
+      <p className="mb-4">Page de gestion des utilisateurs</p>
+      <UsersTable />
+
     </Main>
   )
 }
