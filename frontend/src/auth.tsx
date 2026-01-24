@@ -1,4 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+
+import { apiUrl } from "./lib/api";
 
 interface User {
   id: string;
@@ -6,79 +9,112 @@ interface User {
   email: string;
 }
 
-interface AuthState {
+export async function verifySession(): Promise<User | null> {
+  const response = await fetch(apiUrl("/validate-token"), {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const result = (await response.json()) as {
+    valid: boolean;
+    user: User | null;
+  };
+
+  if (result.valid && result.user) {
+    return result.user;
+  }
+
+  return null;
+}
+
+export interface AuthState {
   isAuthenticated: boolean;
   user: User | null;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
+  verifySession: () => Promise<User | null>;
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const token = localStorage.getItem("auth-token");
-    if (token) {
-      fetch("/api/validate-token", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((response) => response.json())
-        .then((userData) => {
-          if (userData.valid) {
-            setUser(userData.user);
-            setIsAuthenticated(true);
-          } else {
-            localStorage.removeItem("auth-token");
-          }
-        })
-        .catch(() => {
-          localStorage.removeItem("auth-token");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
-      setIsLoading(false);
-    }
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        Loading...
-      </div>
-    );
-  }
 
   const login = async (username: string, password: string) => {
-    const response = await fetch("/api/login", {
+    const response = await fetch(apiUrl("/login"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
+      credentials: "include",
     });
 
     if (response.ok) {
       const userData = await response.json();
-      setUser(userData);
+      setUser(userData.user);
       setIsAuthenticated(true);
-      localStorage.setItem("auth-token", userData.token);
+      queryClient.setQueryData(["auth", "validate"], {
+        valid: true,
+        user: userData.user,
+      });
     } else {
       throw new Error("Authentication failed");
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    setIsAuthenticated(false);
-    localStorage.removeItem("auth-token");
+  const logout = async () => {
+    await fetch(apiUrl("/logout"), {
+      method: "POST",
+      credentials: "include",
+    }).then(() => {
+      setUser(null);
+      setIsAuthenticated(false);
+    });
+  };
+
+  const verifySessionWithState = async () => {
+    try {
+      const response = await fetch(apiUrl("/validate-token"), {
+        credentials: "include",
+      });
+      if (!response.ok) {
+        setUser(null);
+        setIsAuthenticated(false);
+        return null;
+      }
+      const result = (await response.json()) as {
+        valid: boolean;
+        user: User | null;
+      };
+      if (result.valid && result.user) {
+        setUser(result.user);
+        setIsAuthenticated(true);
+        return result.user;
+      }
+      setUser(null);
+      setIsAuthenticated(false);
+      return null;
+    } catch (error) {
+      setUser(null);
+      setIsAuthenticated(false);
+      throw error;
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        user,
+        login,
+        logout,
+        verifySession: verifySessionWithState,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
