@@ -1,15 +1,24 @@
 export type User = {
-  id: string;
-  firstname: string;
-  lastname: string;
-  projects: Project[];
+  id: number;
+  pk_id: string;
+  username: string;
+  email: string;
+  projects: string[];
+  authentik_group: string;
+  is_active: boolean;
 };
 
 export type Project = {
-  id: string;
+  id: number;
+  pk_id: string;
   name: string;
   description: string;
-  users: User[];
+  season: string;
+  users: {
+    id: number;
+    username: string;
+    email: string;
+  }[];
 };
 
 export interface Repository {
