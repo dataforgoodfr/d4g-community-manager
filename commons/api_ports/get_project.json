@@ -1,0 +1,13 @@
+{
+  "id": "string",
+  "pk": "string", // exists ?
+  "name": "string",
+  "description": "string", // why not
+  "users": [
+    {
+      "id": "string",
+      "username": "string",
+      "email": "string"
+    }
+  ]
+}
