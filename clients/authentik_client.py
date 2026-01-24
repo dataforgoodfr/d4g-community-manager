@@ -29,6 +29,44 @@ class AuthentikClient:
             "Content-Type": "application/json",  # Common for POST, harmless for GET
         }
 
+    def get_users(self) -> List[Dict[str, Any]]:
+        """
+        Fetches all user objects from Authentik, handling pagination.
+        :return: A list of full user dictionaries.
+        """
+        if not self.base_url or not self.token:
+            logging.error("Authentik client not configured.")
+            return []
+
+        all_users = []
+        current_url = f"{self.base_url}/api/v3/core/users/"
+        
+        logging.info(f"Fetching all Authentik users starting from: {current_url}")
+
+        page_count = 0
+        while current_url:
+            page_count += 1
+            try:
+                response = requests.get(current_url, headers=self.headers)
+                response.raise_for_status()
+                data = response.json()
+
+                page_users = data.get("results", [])
+                all_users.extend(page_users)
+
+                # Authentik's 'next' key in pagination is usually the full URL
+                current_url = data.get("pagination", {}).get("next")
+                
+            except requests.exceptions.RequestException as e:
+                logging.error(f"Error fetching users on page {page_count}: {e}")
+                break
+            except json.JSONDecodeError as e:
+                logging.error(f"JSON decode error on page {page_count}: {e}")
+                break
+
+        logging.info(f"Successfully fetched {len(all_users)} users across {page_count} pages.")
+        return all_users
+
     def create_group(self, project_name: str) -> bool:
         """
         Creates a group in Authentik.
