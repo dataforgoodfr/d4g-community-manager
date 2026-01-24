@@ -10,7 +10,11 @@ export default function Header() {
   const navLinks = [
     { to: '/users', label: 'Utilisateurs', icon: <Users size={20} /> },
     { to: '/projects', label: 'Projets', icon: <Presentation size={20} /> },
+    { to: '/login', label: 'Connexion', icon: <User size={20} />, end: true },
   ]
+
+  const endItems = navLinks.filter((i) => (i as any).end)
+  const mainLinks = navLinks.filter((i) => !(i as any).end)
 
   return (
     <>
@@ -30,12 +34,23 @@ export default function Header() {
         </h1>
 
         <nav className="mx-auto hidden md:flex md:items-center md:gap-6">
-          {navLinks.map((item) => (
+          {mainLinks.map((item) => (
             <NavButton key={item.to} to={item.to} onClick={() => setIsOpen(false)} icon={item.icon}>
               {item.label}
             </NavButton>
           ))}
         </nav>
+
+        {/* boutons de droite (desktop uniquement) */}
+        {endItems.length > 0 ? (
+          <div className="hidden md:flex md:items-center ml-4">
+            {endItems.map((item) => (
+              <NavButton key={item.to} to={item.to} onClick={() => setIsOpen(false)} icon={item.icon}>
+                {item.label}
+              </NavButton>
+            ))}
+          </div>
+        ) : null}
       </header>
 
       <aside

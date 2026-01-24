@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
+import Table from './Table'
 import type { ColumnDef } from '@tanstack/react-table'
 
 type UserRow = {
@@ -55,38 +55,5 @@ export default function UsersTable() {
     { accessorKey: 'email', header: 'Email' },
   ]
 
-  const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() })
-
-  if (loading) return <div>Chargement des utilisateurs...</div>
-
-  return (
-    <div className="overflow-x-auto bg-white rounded-lg shadow">
-      <table className="min-w-full text-sm text-left">
-        <thead className="bg-gray-50">
-          {table.getHeaderGroups().map((hg) => (
-            <tr key={hg.id}>
-              {hg.headers.map((header) => (
-                <th key={header.id} className="px-4 py-2 font-medium text-gray-700">
-                  {header.isPlaceholder ? null : (
-                    <div>{flexRender(header.column.columnDef.header, header.getContext())}</div>
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody className="divide-y">
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="odd:bg-white even:bg-gray-50">
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="px-4 py-3 text-gray-800 align-middle">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
+  return <Table data={data} columns={columns} loading={loading} />
 }

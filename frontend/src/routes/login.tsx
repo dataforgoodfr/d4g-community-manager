@@ -28,48 +28,56 @@ function Login() {
       await auth.login(username, password);
       navigate({ to: "/" });
     } catch (err) {
-      setError("Invalid credentials");
+      setError("Identifiants invalides");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="text-center">
-      <header className="min-h-screen flex flex-col items-center justify-center bg-primary/70 text-white text-[calc(10px+2vmin)]">
-        <h1 className="text-4xl mb-8">Data for Good Community Manager</h1>
-        <p className="mb-8">Please log in to continue</p>
-        <form onSubmit={handleSubmit} className="w-full max-w-sm text-left">
-          <label className="block mb-4">
-            <span className="block text-sm font-semibold mb-1">Username</span>
+    <main className="min-h-screen flex items-center justify-center">
+      <section className="w-full max-w-md bg-gray-800 backdrop-blur-md rounded-xl p-8 shadow-lg text-white">
+        <h1 className="text-2xl font-bold mb-2">Data for Good</h1>
+        <p className="text-sm text-white/80 mb-6">Connectez-vous pour continuer</p>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Nom d'utilisateur</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 rounded text-white border border-primary-foreground border rounded-xl"
+              className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 placeholder-white/60 text-white outline-none focus:ring-2 focus:ring-primary"
+              placeholder="Votre username"
               required
             />
-          </label>
-          <label className="block mb-6">
-            <span className="block text-sm font-semibold mb-1">Password</span>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Mot de passe</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 rounded text-white border border-(--primary-foreground) border rounded-xl"
+              className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 placeholder-white/60 text-white outline-none focus:ring-2 focus:ring-primary"
+              placeholder="••••••••"
               required
             />
-          </label>
-          {error && <p className="text-red-300 mb-4">{error}</p>}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="bg-primary hover:bg-primary/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2 px-4 rounded w-full"
-          >
-            {isSubmitting ? "Signing in..." : "Log in"}
-          </button>
+          </div>
+
+          {error && <p className="text-red-300 text-sm">{error}</p>}
+
+          <div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-primary hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2 rounded-lg"
+            >
+              {isSubmitting ? "Connexion…" : "Se connecter"}
+            </button>
+          </div>
         </form>
-      </header>
-    </div>
+      </section>
+    </main>
   );
 }
