@@ -1,14 +1,10 @@
-from fastapi import FastAPI
-from api.controller import project_controller, user_controller
-
 import secrets
-
 import config
-from fastapi import FastAPI, Cookie, Header, HTTPException, Response
+
+from fastapi import FastAPI, Cookie, HTTPException, Response
 from pydantic import BaseModel
 
-from controller import user, project
-
+from api.controller import project_controller, user_controller
 
 api = FastAPI()
 
