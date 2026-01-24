@@ -44,3 +44,8 @@ Thumbs.db
 secrets/
 *.key
 *.pem
+
+# Frontend build outputs
+node_modules/
+package-lock.json
+routeTree.gen.ts
