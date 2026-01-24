@@ -16,7 +16,7 @@ export default function UsersTable() {
     let mounted = true
     ;(async () => {
       try {
-        const res = await fetch(new URL('../example.json', import.meta.url).toString())
+        const res = await fetch('/v1/user/all')
         const json = await res.json()
         const rows: UserRow[] = (json || []).map((entry: any) => {
           const u = entry?.user || {}
