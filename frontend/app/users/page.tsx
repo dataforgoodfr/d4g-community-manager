@@ -1,6 +1,7 @@
 "use client";
 
-import { Drawer, Input } from "@mui/material";
+import { Drawer, Input, InputAdornment } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { User } from "../lib/repository/types";
@@ -27,12 +28,16 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex-col">
+      <div className="flex flex-row items-center justify-between">
         <h1 className="text-2xl font-bold">Users</h1>
         <Input
-          type="text"
           placeholder="filter users"
           onChange={(e) => setFilterKey(e.target.value)}
+          startAdornment={
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          }
         />
       </div>
       <table className="table-auto border-collapse border border-gray-300">
