@@ -70,6 +70,7 @@ if __name__ == "__main__":
     try:
         AUTHENTIK_URL = os.getenv("AUTHENTIK_URL")
         AUTHENTIK_TOKEN = os.getenv("AUTHENTIK_TOKEN")
+        
         if not all([AUTHENTIK_URL, AUTHENTIK_TOKEN]):
             logging.error("Missing required environment variables for Authentik: AUTHENTIK_URL, AUTHENTIK_TOKEN")
             sys.exit(1)

@@ -265,7 +265,13 @@ class AuthentikClient:
                     if email:  # Only include users with an email
                         all_users_data.append({"email": email, "attributes": attributes})
 
-                current_url = data.get("pagination", {}).get("next")
+                next_page = data.get("pagination", {}).get("next")
+
+                if next_page:
+                    current_url = f"{self.base_url}/api/v3/core/users/?page={next_page}"
+                else:
+                    current_url = None
+                
                 if current_url:
                     logging.debug(f"Next page for users data: {current_url}")
 
