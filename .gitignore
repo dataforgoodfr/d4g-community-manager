@@ -44,3 +44,7 @@ Thumbs.db
 secrets/
 *.key
 *.pem
+
+# Frontend files
+frontend/.next/
+frontend/node_modules/

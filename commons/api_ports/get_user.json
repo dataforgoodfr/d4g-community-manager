@@ -1,0 +1,14 @@
+{
+  "id": "string", // if we have a DB
+  "pk": "string",
+  "username": "string",
+  "email": "string",
+  "projects": [
+    {
+      "id": "string",
+      "name": "string"
+    }
+  ],
+  "authentik_group": "string",
+  "is_active": "bool"
+}

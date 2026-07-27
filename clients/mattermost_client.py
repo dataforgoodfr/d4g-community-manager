@@ -192,6 +192,36 @@ class MattermostClient:
         except json.JSONDecodeError as e:  # In case response.json() fails on success (unlikely for 201)
             logging.error(f"Error decoding JSON from Mattermost channel creation response for '{project_name}': {e}")
             return None
+        
+    def get_all_channels(self) -> list[dict]:
+        """Fetches all Mattermost channels """
+        if not self.base_url or not self.token:
+            logging.error("Mattermost client not configured (URL or Token missing).")
+
+        # channel_name here should be the URL-safe name (slug), not the display name.
+        url = f"{self.base_url}/api/v4/channels"
+
+        logging.debug(f"Fetching all Mattermost channel from {url}")
+        try:
+            response = requests.get(url,headers=self.headers)
+            response.raise_for_status()
+            channel_data = response.json()
+            logging.info(f"Successfully fetched channel all Mattermost channels.")
+            return channel_data
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 404:
+                logging.warning(f"Unable to fetch all Mattermost channels: Error 404")
+                return None
+            logging.error(
+                f"HTTP error fetching all Mattermost channels': {e.response.status_code} - {e.response.text}"
+            )
+            return None
+        except requests.exceptions.RequestException as e:
+            logging.error(f"Error fetching all Mattermost channels: {e}")
+            return None
+        except json.JSONDecodeError as e:
+            logging.error(f"Error decoding JSON from Mattermost channel response ({url}): {e}")
+            return None
 
     def get_channel_by_name(self, team_id: str, channel_name: str) -> dict | None:
         """Fetches a Mattermost channel by its URL-safe name (slug) within a given team_id."""

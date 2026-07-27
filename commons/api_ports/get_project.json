@@ -1,0 +1,14 @@
+{
+  "id": "string",
+  "pk": "string", // exists ?
+  "name": "string",
+  "description": "string", // why not
+  "season": "string",
+  "users": [
+    {
+      "id": "string",
+      "username": "string",
+      "email": "string"
+    }
+  ]
+}

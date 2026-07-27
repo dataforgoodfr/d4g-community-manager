@@ -1,0 +1,262 @@
+import { Repository, User, Project } from "./types";
+
+const users: User[] = [
+  {
+    id: 1,
+    pk_id: "u1",
+    username: "alice.martin",
+    email: "alice.martin@example.com",
+    projects: ["Cartographie Solidaire", "Eco-Score"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+  {
+    id: 2,
+    pk_id: "u2",
+    username: "bob.dupont",
+    email: "bob.dupont@example.com",
+    projects: ["Eco-Score"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+  {
+    id: 3,
+    pk_id: "u3",
+    username: "claire.bernard",
+    email: "claire.bernard@example.com",
+    projects: ["Cartographie Solidaire", "Refugies.info"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+  {
+    id: 4,
+    pk_id: "u4",
+    username: "david.leroy",
+    email: "david.leroy@example.com",
+    projects: ["Refugies.info"],
+    authentik_group: "volunteers",
+    is_active: false,
+  },
+  {
+    id: 5,
+    pk_id: "u5",
+    username: "emma.petit",
+    email: "emma.petit@example.com",
+    projects: ["Cartographie Solidaire"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+  {
+    id: 6,
+    pk_id: "u6",
+    username: "francois.moreau",
+    email: "francois.moreau@example.com",
+    projects: ["Eco-Score", "Refugies.info"],
+    authentik_group: "admins",
+    is_active: true,
+  },
+  {
+    id: 7,
+    pk_id: "u7",
+    username: "gabrielle.roux",
+    email: "gabrielle.roux@example.com",
+    projects: ["Cartographie Solidaire", "Eco-Score"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+  {
+    id: 8,
+    pk_id: "u8",
+    username: "hugo.fournier",
+    email: "hugo.fournier@example.com",
+    projects: ["Refugies.info"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+  {
+    id: 9,
+    pk_id: "u9",
+    username: "isabelle.girard",
+    email: "isabelle.girard@example.com",
+    projects: ["Eco-Score"],
+    authentik_group: "volunteers",
+    is_active: false,
+  },
+  {
+    id: 10,
+    pk_id: "u10",
+    username: "julien.bonnet",
+    email: "julien.bonnet@example.com",
+    projects: ["Cartographie Solidaire", "Refugies.info"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+  {
+    id: 11,
+    pk_id: "u11",
+    username: "karen.lambert",
+    email: "karen.lambert@example.com",
+    projects: ["Eco-Score"],
+    authentik_group: "admins",
+    is_active: true,
+  },
+  {
+    id: 12,
+    pk_id: "u12",
+    username: "louis.mercier",
+    email: "louis.mercier@example.com",
+    projects: ["Cartographie Solidaire"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+  {
+    id: 13,
+    pk_id: "u13",
+    username: "marie.faure",
+    email: "marie.faure@example.com",
+    projects: ["Refugies.info", "Eco-Score"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+  {
+    id: 14,
+    pk_id: "u14",
+    username: "nicolas.robin",
+    email: "nicolas.robin@example.com",
+    projects: ["Cartographie Solidaire"],
+    authentik_group: "volunteers",
+    is_active: false,
+  },
+  {
+    id: 15,
+    pk_id: "u15",
+    username: "oceane.blanc",
+    email: "oceane.blanc@example.com",
+    projects: ["Refugies.info"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+  {
+    id: 16,
+    pk_id: "u16",
+    username: "paul.chevalier",
+    email: "paul.chevalier@example.com",
+    projects: ["Eco-Score", "Cartographie Solidaire"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+  {
+    id: 17,
+    pk_id: "u17",
+    username: "rachel.morel",
+    email: "rachel.morel@example.com",
+    projects: ["Refugies.info"],
+    authentik_group: "admins",
+    is_active: true,
+  },
+  {
+    id: 18,
+    pk_id: "u18",
+    username: "samuel.gauthier",
+    email: "samuel.gauthier@example.com",
+    projects: ["Cartographie Solidaire", "Eco-Score", "Refugies.info"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+  {
+    id: 19,
+    pk_id: "u19",
+    username: "therese.perrin",
+    email: "therese.perrin@example.com",
+    projects: ["Eco-Score"],
+    authentik_group: "volunteers",
+    is_active: false,
+  },
+  {
+    id: 20,
+    pk_id: "u20",
+    username: "vincent.clement",
+    email: "vincent.clement@example.com",
+    projects: ["Cartographie Solidaire", "Refugies.info"],
+    authentik_group: "volunteers",
+    is_active: true,
+  },
+];
+
+const projects: Project[] = [
+  {
+    id: 1,
+    pk_id: "p1",
+    name: "Cartographie Solidaire",
+    description: "Cartographie des associations et acteurs solidaires en France",
+    season: "2024",
+    users: [
+      { id: 1, username: "alice.martin", email: "alice.martin@example.com" },
+      { id: 3, username: "claire.bernard", email: "claire.bernard@example.com" },
+      { id: 5, username: "emma.petit", email: "emma.petit@example.com" },
+      { id: 7, username: "gabrielle.roux", email: "gabrielle.roux@example.com" },
+      { id: 10, username: "julien.bonnet", email: "julien.bonnet@example.com" },
+      { id: 12, username: "louis.mercier", email: "louis.mercier@example.com" },
+      { id: 14, username: "nicolas.robin", email: "nicolas.robin@example.com" },
+      { id: 16, username: "paul.chevalier", email: "paul.chevalier@example.com" },
+      { id: 18, username: "samuel.gauthier", email: "samuel.gauthier@example.com" },
+      { id: 20, username: "vincent.clement", email: "vincent.clement@example.com" },
+    ],
+  },
+  {
+    id: 2,
+    pk_id: "p2",
+    name: "Eco-Score",
+    description: "Calcul de l'impact environnemental des produits alimentaires",
+    season: "2024",
+    users: [
+      { id: 1, username: "alice.martin", email: "alice.martin@example.com" },
+      { id: 2, username: "bob.dupont", email: "bob.dupont@example.com" },
+      { id: 6, username: "francois.moreau", email: "francois.moreau@example.com" },
+      { id: 7, username: "gabrielle.roux", email: "gabrielle.roux@example.com" },
+      { id: 9, username: "isabelle.girard", email: "isabelle.girard@example.com" },
+      { id: 11, username: "karen.lambert", email: "karen.lambert@example.com" },
+      { id: 13, username: "marie.faure", email: "marie.faure@example.com" },
+      { id: 16, username: "paul.chevalier", email: "paul.chevalier@example.com" },
+      { id: 18, username: "samuel.gauthier", email: "samuel.gauthier@example.com" },
+      { id: 19, username: "therese.perrin", email: "therese.perrin@example.com" },
+    ],
+  },
+  {
+    id: 3,
+    pk_id: "p3",
+    name: "Refugies.info",
+    description: "Plateforme d'information pour les personnes refugiees",
+    season: "2024",
+    users: [
+      { id: 3, username: "claire.bernard", email: "claire.bernard@example.com" },
+      { id: 4, username: "david.leroy", email: "david.leroy@example.com" },
+      { id: 6, username: "francois.moreau", email: "francois.moreau@example.com" },
+      { id: 8, username: "hugo.fournier", email: "hugo.fournier@example.com" },
+      { id: 10, username: "julien.bonnet", email: "julien.bonnet@example.com" },
+      { id: 13, username: "marie.faure", email: "marie.faure@example.com" },
+      { id: 15, username: "oceane.blanc", email: "oceane.blanc@example.com" },
+      { id: 17, username: "rachel.morel", email: "rachel.morel@example.com" },
+      { id: 18, username: "samuel.gauthier", email: "samuel.gauthier@example.com" },
+      { id: 20, username: "vincent.clement", email: "vincent.clement@example.com" },
+    ],
+  },
+];
+
+export class InMemoryRepository implements Repository {
+  async getUsers(): Promise<User[]> {
+    return users;
+  }
+
+  async getProjects(): Promise<Project[]> {
+    return projects;
+  }
+
+  async getUserById(id: string): Promise<User | undefined> {
+    return users.find((u) => u.id === Number(id));
+  }
+
+  async getProjectById(id: string): Promise<Project | undefined> {
+    return projects.find((p) => p.id === Number(id));
+  }
+}
